@@ -1,171 +1,223 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <locale.h>
+#include <time.h>
 
 int main(int argc, char *argv[]) {
-setlocale(LC_ALL, "Portuguese");
-system("color 0A");	
+	setlocale(LC_ALL, "Portuguese");
+	system("color 0A");
+	srand((unsigned) time(NULL));
 
-int resp, resp1; //sistema de menu
+	int resp, resp1;            // sistema de menu
+	int continuar = 1;          // 1 = continua no programa, 0 = encerra
 
-int mencao, i; //nota
-float nota= -1, media, nota_soma; 
+	int mencao, i;              // nota
+	float nota = -1, media, nota_soma, nova_nota;
 
-float temp=-1, soma_temp;//tempo de estudo
-int tempo_resposta;
-	
+	float temp = -1, soma_temp, novo_temp;   // tempo de estudo
+
+	int a, b, resposta_desafio; // desafio de matemática
+
 	do
 	{
-		//Mensagem pro usuario
+		// Mensagem pro usuário
 		system("cls");
-		printf("********************VIDA DE ESTUDANTE ***************\n");
-		printf("Digite o que queira realizar\n");
+		printf("******************** VIDA DE ESTUDANTE ********************\n");
+		printf("Digite o que deseja realizar\n");
 		printf("1-Registrar nota\n");
 		printf("2-Registrar tempo de estudo\n");
-		printf("3-Calcular m�dia\n");
-		printf("4-Verificar situa��o\n");
-		printf("5-Desafio de matem�tica\n");
-		printf("6-sair\n");
+		printf("3-Calcular média\n");
+		printf("4-Verificar situação\n");
+		printf("5-Desafio de matemática\n");
+		printf("6-Sair\n");
 		printf("Digite sua resposta: ");
-		scanf("%d", & resp);
-		
-		//sistema do menu
-		switch (resp){
-		case 1:
-		system("cls");
-			if(nota== -1)
-				printf("� sua primeira vez usando o registro de nota\n");
-			printf("O que deseja saber?\n");
-			printf("1-Descobrir a sua nota m�dia\n");
-			printf("2-Incerir nova nota\n");
-			if(nota>0)
-				printf("3-Ver minha nota\n");
-			scanf("%d", & resp1);
-			
-			switch(resp1){ 
-				case 1: //escolha de nota do usuario
-					printf("Quantas men��es se professor(a) usa: ");
-					scanf("%d", & mencao);
-					if(mencao<=0){
-						printf("numero invalido");
-						return 0;
+		if (scanf("%d", &resp) != 1) {          // evita travar se digitar letra
+			while (getchar() != '\n');
+			resp = 0;
+		}
+
+		// sistema do menu
+		switch (resp) {
+		case 1: // Registrar nota
+			system("cls");
+			if (nota == -1)
+				printf("É sua primeira vez usando o registro de nota\n");
+			printf("O que deseja fazer?\n");
+			printf("1-Inserir nova nota\n");
+			if (nota >= 0)
+				printf("2-Ver minha nota\n");
+			printf("Digite sua resposta: ");
+			if (scanf("%d", &resp1) != 1) {
+				while (getchar() != '\n');
+				resp1 = 0;
+			}
+
+			switch (resp1) {
+				case 1:
+					printf("Digite sua nota (0 a 10): ");
+					if (scanf("%f", &nova_nota) != 1) {
+						while (getchar() != '\n');
+						nova_nota = -1;
 					}
-					for(i=1; i<=mencao;i++){
-						printf("digite sua %d� nota de 0 a 10: ", i);
-						scanf("%f", & nota_soma);
-						if(nota_soma>=0 && nota_soma<=10)
-					media+=nota_soma;
-						else{
-							printf("Numero invalido!");
-							return 0;
-						}
+					if (nova_nota >= 0 && nova_nota <= 10) {
+						nota = nova_nota;
+						printf("Nota registrada!\n");
+					} else {
+						printf("Nota inválida!\n");
 					}
-					nota=media/mencao;
-					printf("Sua nota m�dia �: %.2f\n", nota);
-					printf("Deseja continar? 1 para sim 0 para n�o: ");
-					scanf("%d", & resp);
-					if(resp!=1)
-					resp=6;
 				break;
 				case 2:
-					printf("Digite usa Nota: ");
-					scanf("%f", & nota);
-					if(nota>=0 && nota<=10){
-					printf("Deseja continar? 1 para sim 0 para n�o: ");
-					scanf("%d", & resp);
-					if(resp!=1)
-					resp=6;
-				}
+					if (nota >= 0)
+						printf("Sua nota atual é: %.2f\n", nota);
+					else
+						printf("Opção inválida!\n");
+				break;
+				default:
+					printf("Opção inválida!\n");
+				break;
+			}
+		break;
+
+		case 2: // Registrar tempo de estudo
+			system("cls");
+			if (temp == -1)
+				printf("É sua primeira vez usando o registro de tempo de estudo do dia\n");
+			printf("O que deseja fazer?\n");
+			printf("1-Registrar meu tempo\n");
+			if (temp >= 0) {
+				printf("2-Consultar meu tempo de estudo atual\n");
+				printf("3-Somar tempo de estudo\n");
+			}
+			printf("Digite sua resposta: ");
+			if (scanf("%d", &resp1) != 1) {
+				while (getchar() != '\n');
+				resp1 = 0;
+			}
+
+			switch (resp1) {
+				case 1:
+					printf("Quantas horas de estudo você teve hoje? ");
+					if (scanf("%f", &novo_temp) != 1) {
+						while (getchar() != '\n');
+						novo_temp = -1;
+					}
+					if (novo_temp >= 0 && novo_temp <= 24) {
+						temp = novo_temp;
+						printf("Tempo registrado!\n");
+					} else {
+						printf("Tempo inválido! Digite um valor entre 0 e 24.\n");
+					}
+				break;
+				case 2:
+					if (temp >= 0)
+						printf("Seu tempo de estudo atual é: %.2f horas\n", temp);
+					else
+						printf("Opção inválida!\n");
 				break;
 				case 3:
-					if(nota!=-1){
-					printf("Sua nota atual �: %.2f\n", nota);
-					printf("Deseja continar? 1 para sim 0 para n�o: ");
-					scanf("%d", & resp);
-					if(resp!=1)
-					resp=6;}
-				break;
-				default: 
-					printf("Op��o invalida!");
-				break;	
-			}
-		break;
-		case 2:
-			if(temp==-1)
-				printf("� sua primeira vez usando o registro de tempo de estudo do dia\n");
-			printf("O que deseja saber?\n");
-			printf("1-Registrar meu tempo\n");
-			if(temp>0)
-				printf("2-consultar meu tempo de estudo atual ou atualizalo: ");
-			scanf("%d", & resp1);
-				if(temp==-1 && (resp1!=1)){
-					printf("op��o invalida");
-					return 0;
-				}
-				if(resp1!=1 && resp1!=2){
-					printf("Op��o invalida!");
-					return 0;}
-			switch(resp1){
-				case 1:
-					printf("Quantas horas de estudo voce teve hoje? ");
-					scanf("%f", & temp);
-					if(temp>=0 && temp<=24){
-					printf("Tempo registrado, deseja continuar? 1 para sim e 2 para n�o");
-					scanf("%d", & resp);
-					if(resp!=1)
-					resp=6;}
-					else{
-						printf("tempo invalido");
-					resp=6;
+					if (temp >= 0) {
+						printf("Quanto tempo deseja somar (em horas)? ");
+						if (scanf("%f", &soma_temp) != 1) {
+							while (getchar() != '\n');
+							soma_temp = -1;
+						}
+						if (soma_temp <= 0)
+							printf("Valor inválido!\n");
+						else if (temp + soma_temp > 24)
+							printf("O total não pode passar de 24 horas por dia!\n");
+						else {
+							temp += soma_temp;
+							printf("Tempo atualizado: %.2f horas\n", temp);
+						}
+					} else {
+						printf("Opção inválida!\n");
 					}
 				break;
-				case 2:
-				printf("O que voce deseja fazer? 1-para ver a minhas horas de estudos totais 2-para somar tempo de estudo: ");
-				scanf("%d", & resp1);
-			if (resp1 != 1 && resp1 != 2) 
-    			resp = 6; // Valor inv�lido
-				switch(resp1){
-					case 1:
-						printf("seu tempo de estudo atual �: %.2f\n", temp);
-						printf("Deseja continar? 1 para sim 0 para n�o: ");
-					scanf("%d", & resp);
-					if(resp!=1)
-					resp=6;
-					break;
-					case 2:
-						printf("quanto tempo deseja soma: ");
-						scanf("%f", & soma_temp);
-						if(soma_temp<=0 || soma_temp>24)
-						temp+=soma_temp;
-						if(temp>=24.99)
-						{
-							printf("op��o invalida");
-						resp=6;
-						}
 				default:
-					printf("op��o invalida");
-					resp=6;
+					printf("Opção inválida!\n");
 				break;
 			}
+		break;
+
+		case 3: // Calcular média
+			system("cls");
+			printf("Quantas menções seu professor(a) usa: ");
+			if (scanf("%d", &mencao) != 1) {
+				while (getchar() != '\n');
+				mencao = 0;
+			}
+			if (mencao <= 0) {
+				printf("Número inválido!\n");
+			} else {
+				media = 0;                  // começa zerada (antes tinha lixo de memória)
+				int valida = 1;             // controla se todas as notas foram válidas
+				for (i = 1; i <= mencao && valida; i++) {
+					printf("Digite sua %dª nota de 0 a 10: ", i);
+					if (scanf("%f", &nota_soma) != 1) {
+						while (getchar() != '\n');
+						nota_soma = -1;
+					}
+					if (nota_soma >= 0 && nota_soma <= 10)
+						media += nota_soma;
+					else {
+						printf("Número inválido!\n");
+						valida = 0;
+					}
+				}
+				if (valida) {
+					nota = media / mencao;
+					printf("Sua nota média é: %.2f\n", nota);
+				}
+			}
+		break;
+
+		case 4: // Verificar situação
+			system("cls");
+			if (nota < 0)
+				printf("Você ainda não registrou nenhuma nota nem calculou a média.\n");
+			else if (nota >= 6)
+				printf("Nota %.2f - APROVADO(A)!\n", nota);
+			else if (nota >= 4)
+				printf("Nota %.2f - EM RECUPERAÇÃO.\n", nota);
+			else
+				printf("Nota %.2f - REPROVADO(A).\n", nota);
+		break;
+
+		case 5: // Desafio de matemática
+			system("cls");
+			a = rand() % 10 + 1;
+			b = rand() % 10 + 1;
+			printf("***** DESAFIO DE MATEMÁTICA *****\n");
+			printf("Quanto é %d x %d? ", a, b);
+			if (scanf("%d", &resposta_desafio) != 1) {
+				while (getchar() != '\n');
+				printf("Resposta inválida!\n");
+			} else if (resposta_desafio == a * b) {
+				printf("Parabéns, resposta correta!\n");
+			} else {
+				printf("Errou! A resposta certa era %d.\n", a * b);
+			}
+		break;
+
+		case 6: // Sair
+			printf("Até logo, bons estudos!\n");
+		break;
+
+		default:
+			printf("Opção inválida!\n");
+		break;
 		}
-		
-		break;
-		case 3:
-		
-		break;
-		case 4:
-			
-		break;
-		case 5:
-			
-		break;
-		case 6:
-			
-		break;
-		default: 
-		break;
+
+		// Pergunta se continua (depois de qualquer opção, exceto sair)
+		if (resp != 6) {
+			printf("\nDeseja continuar? 1 para sim 0 para não: ");
+			if (scanf("%d", &continuar) != 1) {
+				while (getchar() != '\n');
+				continuar = 0;
+			}
 		}
 	}
-	while(resp!=6);
-return 0;
+	while (resp != 6 && continuar == 1);
+
+	return 0;
 }
